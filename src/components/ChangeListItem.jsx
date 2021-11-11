@@ -6,41 +6,58 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import { useSelector, useDispatch } from 'react-redux';
+import { add, edit, defaultList } from '../features/TaskItem/TaskSlice';
 import PropTypes from 'prop-types';
 
 export default function ChangeListItem({
-	task,
+	value = '',
 	OpenDialog,
-	CreateNewTask,
-	OldTaskName = '',
+	CloseDialog,
+	type = 'add',
 }) {
 	const [open, setOpen] = React.useState(OpenDialog);
-	const [newTask, setNewTask] = React.useState(OldTaskName);
-	const [disabled, setDisabled] = React.useState(Boolean(newTask === ''));
+	const [InputValue, setInputValue] = React.useState(
+		type === 'edit' ? value : ''
+	);
+	const [disabled, setDisabled] = React.useState(Boolean(InputValue === ''));
+	let Data = useSelector(defaultList);
+	Data = [...Data];
+	const dispatch = useDispatch();
+	let DialogContentTextType = `Добавьте ${type}`;
 
 	const handleClose = () => {
 		setOpen(false);
-		CreateNewTask(false);
+		CloseDialog(false);
 	};
-	const ChangeNewTask = (e) => {
-		setNewTask(e.target.value);
+
+	const ChangeInputValue = (e) => {
+		setInputValue(e.target.value);
 		setDisabled(e.target.value === '');
 	};
-	const SaveNewTask = () => {
-		setOpen(false);
-		CreateNewTask(newTask);
+
+	const SaveChange = () => {
+		let TaskDuplicate = Data.find((o) => o.name === InputValue);
+		if (TaskDuplicate) {
+			setDisabled(true);
+		} else {
+			type === 'add'
+				? dispatch(add([value, InputValue]))
+				: dispatch(edit([value, InputValue]));
+			setOpen(false);
+			CloseDialog(false);
+		}
 	};
 
 	return (
 		<div>
-			<Dialog open={open} onClose={handleClose}>
+			<Dialog open={open}>
 				<DialogTitle>Создание задачи</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Добавьте{' '}
-						{task !== ''
-							? `подзадачу для задачи ${task}`
-							: `задачу`}
+						{DialogContentTextType}
 					</DialogContentText>
 					<TextField
 						autoFocus
@@ -50,13 +67,20 @@ export default function ChangeListItem({
 						type='text'
 						fullWidth
 						variant='standard'
-						value={newTask}
-						onChange={ChangeNewTask}
+						value={InputValue}
+						onChange={ChangeInputValue}
+						/* onBlur={() => alert('Im blur, da budi da budai!')} */
 					/>
+					<Collapse in={disabled}>
+						<Alert severity='warning' sx={{ mb: 2 }}>
+							Невозможно добавить пустую или продублированную
+							задачу!
+						</Alert>
+					</Collapse>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Отменить</Button>
-					<Button onClick={SaveNewTask} disabled={disabled}>
+					<Button onClick={SaveChange} disabled={disabled}>
 						Добавить
 					</Button>
 				</DialogActions>
@@ -65,8 +89,8 @@ export default function ChangeListItem({
 	);
 }
 ChangeListItem.propTypes = {
-	task: PropTypes.string,
+	value: PropTypes.string,
 	OpenDialog: PropTypes.bool,
-	CreateNewTask: PropTypes.func,
-	OldTaskName: PropTypes.string,
+	CloseDialog: PropTypes.func,
+	type: PropTypes.string,
 };

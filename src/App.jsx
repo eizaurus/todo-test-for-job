@@ -4,10 +4,18 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import ListItemComponent from './components/ListItemComponent';
 import ChangeListItem from './components/ChangeListItem';
-import Data from './data-test.json';
+/* import Data from './data-test.json';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+	add,
+	edit,
+	deleteTask,
+	finish,
+	defaultList,
+} from './features/TaskItem/TaskSlice'; */
 
-const UpdateData = () => {
-	let SortData = Data.sort(function (a, b) {
+const UpdateData = (defaultData) => {
+	let SortData = defaultData.sort(function (a, b) {
 		let nameA = a.parentTask.toLowerCase();
 		let nameB = b.parentTask.toLowerCase();
 		if (nameA < nameB) {
@@ -43,6 +51,67 @@ const UpdateData = () => {
 	console.log(NewData);
 	return NewData;
 };
+/* 
+export function App(){
+	const Data = UpdateData(useSelector(defaultList));
+	const dispatch = useDispatch();
+
+	return (
+		<>
+			<IconButton
+				aria-label='fingerprint'
+				color='secondary'
+				onClick={this.handleOpenAddListItem}
+			>
+				<AddIcon />
+			</IconButton>
+			<List
+				sx={{
+					width: '100%',
+					maxWidth: 360,
+					bgcolor: 'background.paper',
+				}}
+			>
+				{this.state.TaskList.map((v, key) => (
+					<>
+						<ListItemComponent
+							key={`parent-${key}`}
+							value={v.name}
+							divider={key > 0}
+							finish={v.finish}
+							changeFinish={this.handleChangeFinish}
+						/>
+						{v.children.length > 0
+							? v.children.map((w, wkey) => (
+									<>
+										<ListItemComponent
+											key={`children-${wkey}`}
+											value={w.name}
+											divider={key > 0}
+											finish={w.finish}
+											changeFinish={
+												this.handleChangeFinish
+											}
+											parentTask={v.name}
+										/>
+									</>
+							  ))
+							: ''}
+					</>
+				))}
+			</List>
+			{this.state.NewTaskIsOpen ? (
+				<ChangeListItem
+					task={this.state.NewTaskName}
+					OpenDialog={this.state.NewTaskIsOpen}
+					CreateNewTask={this.handleCloseAddListItem}
+				/>
+			) : (
+				''
+			)}
+		</>
+	);
+} */
 
 export default class App extends React.Component {
 	constructor(props) {
