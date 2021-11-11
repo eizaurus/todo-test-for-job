@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Задача 1",
+        "parentTask": "",
+        "finish": false
+    },
+    {
+        "name": "Задача 2",
+        "parentTask": "Задача 1",
+        "finish": true
+    },
+    {
+        "name": "Задача 3",
+        "parentTask": "",
+        "finish": false
+    },
+    {
+        "name": "Задача 4",
+        "parentTask": "",
+        "finish": false
+    },
+    {
+        "name": "Задача 5",
+        "parentTask": "",
+        "finish": true
+    },
+    {
+        "name": "Задача 6",
+        "parentTask": "Задача 3",
+        "finish": false
+    }
+]
