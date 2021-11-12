@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const slice = createSlice({
 	name: 'task',
@@ -50,16 +50,11 @@ export const slice = createSlice({
 	},
 	reducers: {
 		add: (state, action) => {
-			console.log(action);
 			let parentTask = action.payload[0];
 			let value = action.payload[1];
 			let finish = false;
-			console.log('value', value);
-			console.log('parentTask', parentTask);
-			console.log("parentTask !== ''", parentTask !== '');
 			if (parentTask !== '') {
 				finish = state.value.find((o) => o.name === parentTask).finish;
-				console.log('finish', finish);
 			}
 			let currentTime = Date.now();
 			state.value.push({
@@ -69,13 +64,11 @@ export const slice = createSlice({
 				datetimeCreate: currentTime,
 				datetimeEdit: 0,
 			});
-			console.log(current(state));
 		},
 		edit: (state, action) => {
 			let oldValue = action.payload[0];
 			let NewValue = action.payload[1];
 			let currentTime = Date.now();
-			console.log('currentTime', currentTime);
 			state.value.find((o) => o.name === oldValue).datetimeEdit =
 				currentTime;
 			state.value.find((o) => o.name === oldValue).name = NewValue;
@@ -96,24 +89,24 @@ export const slice = createSlice({
 			state.value.find((o) => o.name === currentValue).finish = !finish;
 			state.value.find((o) => o.name === currentValue).datetimeEdit =
 				currentTime;
-			console.log(current(state));
 			if (
 				!finish &&
 				state.value.find((o) => o.parentTask === currentValue)
 			) {
-				state.value.find(
-					(o) => o.parentTask === currentValue
-				).datetimeEdit = currentTime;
-				state.value.find((o) => o.parentTask === currentValue).finish =
-					!finish;
+				state.value.map((o) => {
+					if (o.parentTask === currentValue) {
+						o.finish = !finish;
+						o.datetimeEdit = currentTime;
+						return o;
+					}
+					return o;
+				});
 			}
 		},
 	},
 });
-/* console.log(state.task); */
 export const { add, edit, deleteTask, finish } = slice.actions;
 export const defaultList = (state) => {
-	/* console.log(state.list.value); */
 	return state.list.value;
 };
 export default slice.reducer;

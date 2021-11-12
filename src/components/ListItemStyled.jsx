@@ -5,6 +5,6 @@ export const ListItemTextCustom = styled(ListItemText, {
 	shouldForwardProp: (prop) => prop !== 'finish',
 })(({ finish }) => ({
 	...(finish && {
-		textDecorationLine: 'line-through',
+		'.MuiListItemText-primary': { textDecorationLine: 'line-through' },
 	}),
 }));

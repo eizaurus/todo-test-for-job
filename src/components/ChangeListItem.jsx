@@ -23,8 +23,7 @@ export default function ChangeListItem({
 		type === 'edit' ? value : ''
 	);
 	const [disabled, setDisabled] = React.useState(Boolean(InputValue === ''));
-	let Data = useSelector(defaultList);
-	Data = [...Data];
+	let Data = [...useSelector(defaultList)];
 	const dispatch = useDispatch();
 	let DialogContentTextType = `Добавьте ${type}`;
 

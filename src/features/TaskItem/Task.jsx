@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import List from '@mui/material/List';
-import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import ListItemComponent from '../../components/ListItemComponent';
 import ChangeListItem from '../../components/ChangeListItem';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 import { defaultList } from './TaskSlice';
 
@@ -56,13 +58,24 @@ export default function Task() {
 	const [openDialog, setOpenDialog] = useState(false);
 	return (
 		<>
-			<IconButton
-				aria-label='fingerprint'
-				color='secondary'
-				onClick={() => setOpenDialog(true)}
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					margin: 3,
+				}}
 			>
-				<AddIcon />
-			</IconButton>
+				<Typography variant='h5' component='h5'>
+					ToDo Список Задач
+				</Typography>
+				<Button
+					endIcon={<AddIcon />}
+					onClick={() => setOpenDialog(true)}
+					color='primary'
+				>
+					Добавить Задачу
+				</Button>
+			</Box>
 			<List>
 				{Data.map((v, key) => (
 					<div key={v.name.toString()}>
